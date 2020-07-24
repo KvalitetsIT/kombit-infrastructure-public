@@ -8,7 +8,7 @@ Vejledningen beskriver hvilke skridt man skal udføre for at gennemføre opkobli
 ## Forudsætninger
 For at køre setuppet har man brug for at have [Docker Community Edition](https://docs.docker.com/install/) installeret. 
 
-For at etablere login gennem sin applikation, skal applikationen kunne kommunikere over SAML 2.0-protokollen. Det er op til tjenesteudbyderen at vælge, hvordan dette skal gøres. Man kan enten importere et SAML-rammeværk i sin applikation, eller deploye sin applikation bag en SAML-proxy (demo-setuppet fungerer på denne måde).
+For at etablere login gennem sin applikation, skal applikationen kunne kommunikere over SAML 2.0-protokollen. Det er op til tjenesteudbyderen at vælge, hvordan dette skal gøres. Man kan enten importere et SAML-rammeværk i sin applikation, eller deploye sin applikation bag en SAML-proxy (demo-setuppet fungerer på denne måde). Dette vil uanset hvad medføre, at man skal generere et nøglepar for sin applikation. Til testformål kan der anvendes selvsignerede certiifikater, mens der til produktion skal anvendes CA-udstedte certifikater.
 
 ## Det udleverede setup
 Setuppet består af en række containere, beskrevet i filen docker-compose.yml, samt en række filer, som vist her:
