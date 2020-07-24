@@ -1,17 +1,14 @@
 # Login gennem KOMBIT Adgangsstyring
-Denne vejledning beskriver, hvordan man som tjenesteudbyder opsætter sin applikation, så den tilbyder login gennem KOMBIT Adgangsstyring. Login går gennem KIT's infrastruktur, og man får således mulighed for at logge ind gennem Adgangsstyring, uden at man skal oprettes som tjenesteudbyder i KOMBITs infrastruktur. Man kan desuden teste login gennem KIT's test-idp, så man ikke behøver at involvere en kommune før senere i forløbet.
+Denne vejledning beskriver hvordan man som tjenesteudbyder opsætter sin applikation, så den tilbyder login gennem KOMBIT Adgangsstyring. Login går gennem KIT's infrastruktur, og man får således mulighed for at logge ind gennem Adgangsstyring, uden at man skal oprettes som tjenesteudbyder i KOMBITs infrastruktur. Man kan desuden teste login gennem KIT's test-idp, så man ikke behøver at involvere en kommune før senere i forløbet.
 
-KOMBIT Adgangsstyring er en fælleskommunal løsning, der fungerer som bindeled mellem kommunale brugerdatabaser (f.eks. AD) og brugervendte systemer, så det brugervendte system kun skal håndtere login gennem Adgangsstyring.
+KOMBIT Adgangsstyring er en fælleskommunal løsning, der fungerer som bindeled mellem kommunale brugerdatabaser (AD og lignende produkter) og brugervendte systemer, så det brugervendte system kun skal håndtere login gennem Adgangsstyring.
 
 Vejledningen beskriver hvilke skridt man skal udføre for at gennemføre opkoblingen. Der medfølger også et demo-setup, der demonstrerer login.
 
 ## Forudsætninger
 For at køre setuppet har man brug for at have [Docker Community Edition](https://docs.docker.com/install/) installeret. 
 
-For at etablere login gennem sin applikation skal applikationen kunne kommunikere over SAML 2.0-protokollen. Man kan enten importere et SAML-rammeværk i sin applikation, eller deploye sin applikation bag en SAML-proxy (demo-setuppet fungerer på denne måde).
-
-### TODO: få styr på nedenstående
-Man skal desuden have en konto i KIT's docker registry, kitdocker.kvalitetsit.dk. Man kan skrive til njo@kvalitetsit.dk eller mads@kvalitetsit.dk, hvis man ikke har fået eller ikke kan huske sit brugernavn og password.
+For at etablere login gennem sin applikation, skal applikationen kunne kommunikere over SAML 2.0-protokollen. Det er op til tjenesteudbyderen at vælge, hvordan dette skal gøres. Man kan enten importere et SAML-rammeværk i sin applikation, eller deploye sin applikation bag en SAML-proxy (demo-setuppet fungerer på denne måde).
 
 ## Det udleverede setup
 Setuppet består af en række containere, beskrevet i filen docker-compose.yml, samt en række filer, som vist her:
@@ -26,6 +23,9 @@ Setuppet består af en række containere, beskrevet i filen docker-compose.yml, 
     └── metadata.xml
 
 ```
+
+Demo-applikationen, som er beskyttet af login, er en simpel applikation som blot skriver de requests den modtager tilbage til klienten.
+
 Man starter setuppet ved at køre:
 
 ```
@@ -44,7 +44,7 @@ I produktion er det kun kommuner, der har lov til at fremgå af listen. I test k
 
 ![test-idp](images/test_idp.png)
 
-Her kan man logge ind med følgende test-credentials: 'test'/'Test1234'. Klik 'ok'. Man videresendes nu til demo-applikationen, og login er udført succesfuldt:
+Her kan man logge ind med følgende test-credentials: 'test'/'Test1234'. Klik 'ok'. Man videresendes nu til demo-applikationen, og login er udført:
 
 ![echo](images/echo.png)
 
@@ -54,10 +54,10 @@ Hvis man får vist ovenstående skærmbillede, så har man succesfuldt fået set
 For at etablere opkobling til Keycloak, skal der udveksles metadata mellem applikationen og Keycloak. Dette beskrives i de følgende afsnit.
 
 ### Generere metadata for applikation
-Der skal genereres metadata for applikationen. Hvordan dette gøres afhænger af applikationens valgte saml-rammeværk, men kan typisk genereres ved at tilgå en bestemt url. Når metadata er genereret, sendes det til KIT (njo@kvalitetsit.dk eller mads@kvalitetsit.dk).
+Applikationen skal oprettes i Keycloak, og til dette formål skal der genereres metadata for applikationen. Hvordan dette gøres afhænger af applikationens valgte saml-rammeværk, men kan typisk genereres ved at tilgå en bestemt url, som applikationen udstiller ved hjælp af rammeværket. Når metadata er genereret, sendes det til KIT (njo@kvalitetsit.dk eller mads@kvalitetsit.dk).
 
 ### Hente metadata fra Keycloak
-Man henter metadata for Keycloak her: https://keycloak.test01.kitkube.dk/auth/realms/kombit/protocol/saml/descriptor. Metadata-filen skal placeres et sted hvor applikationen kan læse den, hvilket igen afhænger af det valgte saml-rammeværk. Metadata-filen lægges 
+Applikationen skal sættes op til at genkende Keycloak som identity provider, hvilket gøres ved at installere en metadata-fil for Keycloak i applikationen. Man henter metadata for Keycloak her: https://keycloak.test01.kitkube.dk/auth/realms/kombit/protocol/saml/descriptor. Metadata-filen skal placeres et sted hvor applikationen kan læse den, hvilket igen afhænger af det valgte saml-rammeværk.
 
 ### Test af login
 Login kan nu testes ved at følge proceduren beskrevet tidligere.
