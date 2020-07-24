@@ -1,0 +1,46 @@
+version: '2'
+networks:
+  novaxidp:
+    driver: bridge
+services:
+   echo-saml-sp:
+     image: kvalitetsit/serviceprovider-spapp:latest
+     volumes:
+       - ./echo/metadata.xml:/app/config/metadata.xml
+       - ./echo/certificates/echo.cert:/certificates/echo.cert
+       - ./echo/certificates/echo.pem:/certificates/echo.pem
+     environment:
+       - IDP_LOGIN_URL=https://keycloak.test01.kitkube.dk/auth/realms/kombit/protocol/saml
+       - CERTIFICATE=/certificates/echo.cert
+       - KEY=/certificates/echo.pem
+       - SP_ENTITY_ID=echo
+       - SAML_LB_SCHEME=http
+       - SAML_LB_SERVERNAME=localhost
+       - SAML_LB_SERVERPORT=9090
+       - APP_CONTEXT=echo
+       - MONGODB=mongo
+       - MONGODB_DATABASE=mongo_echo
+     networks:
+      - novaxidp
+   echo-sp-proxy:
+     image: kvalitetsit/serviceprovider-spproxy:latest
+     environment:
+      - ENDPOINT_URL=http://echo/
+      - SAML_URL=http://echo-saml-sp:8080/
+      - CONTEXT=echo
+      - MONGODB=mongo
+      - MONGODB_DATABASE=mongo_echo
+      - CORRELATION_ID=correlation-id
+      - SESSION_DATA_HEADER_NAME=session-data
+     networks:
+      - novaxidp
+     ports:
+      - "9090:80"
+   mongo:
+     image: mongo:3.3
+     networks:
+      - novaxidp
+   echo:
+     image: mendhak/http-https-echo
+     networks:
+      - novaxidp
