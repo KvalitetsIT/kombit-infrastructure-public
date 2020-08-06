@@ -11,7 +11,7 @@ For at køre setuppet har man brug for at have [Docker Community Edition](https:
 For at etablere login gennem sin applikation, skal applikationen kunne kommunikere over SAML 2.0-protokollen. Det er op til tjenesteudbyderen at vælge, hvordan dette skal gøres. Man kan enten importere et SAML-rammeværk i sin applikation, eller deploye sin applikation bag en SAML-proxy (demo-setuppet fungerer på denne måde). Dette vil uanset hvad medføre, at man skal generere et nøglepar for sin applikation. Til testformål kan der anvendes selvsignerede certiifikater, mens der til produktion skal anvendes CA-udstedte certifikater.
 
 ## Det udleverede setup
-Setuppet består af en række containere, beskrevet i filen docker-compose.yml, samt en række filer, som vist her:
+Setuppet består af en række containere, beskrevet i filen testlogin/docker-compose.yml, samt en række filer, som vist her:
 
 ```
 .
@@ -20,7 +20,7 @@ Setuppet består af en række containere, beskrevet i filen docker-compose.yml, 
     ├── certificates
     │   ├── echo.cert
     │   └── echo.pem
-    └── metadata.xml
+    └── config.json
 
 ```
 
@@ -32,7 +32,7 @@ Man starter setuppet ved at køre:
 docker-compose up
 ```
 
-Når containerne er oppe tilgår man _http://localhost:9090/echo/_ i en browser. Man viderestilles til KeyCloak, og klikker på 'adgangsstyring':
+Når containerne er oppe tilgår man _http://localhost/_ i en browser. Man viderestilles til KeyCloak, og klikker på 'adgangsstyring':
 
 ![keycloak](images/keycloak_login.png)
 

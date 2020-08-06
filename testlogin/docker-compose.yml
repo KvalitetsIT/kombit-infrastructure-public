@@ -1,0 +1,24 @@
+version: '2'
+networks:
+  samllogin:
+    driver: bridge
+services:
+   samlsp:
+     image: kvalitetsit/kitcaddy:1.2.3
+     volumes:
+       - ./echo/certificates/echo.cert:/sp/sp.cer
+       - ./echo/certificates/echo.pem:/sp/sp.pem
+       - ./echo/config.json:/config/config.json
+     command: -config /config/config.json
+     ports:
+      - "80:8585"
+     networks:
+      - samllogin
+   mongo:
+     image: mongo:3.6
+     networks:
+      - samllogin
+   echo:
+     image: mendhak/http-https-echo
+     networks:
+      - samllogin
