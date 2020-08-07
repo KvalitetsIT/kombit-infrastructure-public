@@ -32,7 +32,7 @@ Man starter setuppet ved at køre:
 docker-compose up
 ```
 
-Når containerne er oppe tilgår man _http://localhost/_ i en browser. Man viderestilles til KeyCloak, og klikker på 'adgangsstyring':
+Når containerne er oppe tilgår man _http://localhost/_ i en browser. Man viderestilles til KeyCloak, og klikker på 'adgangsstyring' (i produktion vil man blive viderestillet direkte):
 
 ![keycloak](images/keycloak_login.png)
 
@@ -49,6 +49,14 @@ Her kan man logge ind med følgende test-credentials: 'test'/'Test1234'. Klik 'o
 ![echo](images/echo.png)
 
 Hvis man får vist ovenstående skærmbillede, så har man succesfuldt fået setuppet til at køre.
+
+## Testsetup
+Testsetup'et består af 3 containere:
+* ServiceProvider (samlsp) der benytter kvalitetsit/kitcaddy. Komponenten er en implementation af en SAML ServiceProvider.
+* Mongo database (mongodb) der gemmer sessionsdata fra samlsp.
+* En "applikation" der viser det request der kommer ind.
+
+kvalitetsit/kitcaddy er en opensource komponent der frit kan benyttes. Alternativt kan applikationen selv udstille sig som SAML service provider.
 
 ## Opkobling til Keycloak
 For at etablere opkobling til Keycloak, skal der udveksles metadata mellem applikationen og Keycloak. Dette beskrives i de følgende afsnit.
