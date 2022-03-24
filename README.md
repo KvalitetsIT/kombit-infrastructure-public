@@ -34,6 +34,7 @@ her:
     │   ├── echo.cert
     │   └── echo.pem
     └── config.json
+    └── config-email.json
 
 ```
 
@@ -75,12 +76,12 @@ Testsetup'et består af 3 containere:
   ServiceProvider.
 * Mongo database (mongodb) der gemmer sessionsdata fra samlsp.
 * En "applikation" der viser det request der kommer ind.
-  
-kvalitetsit/kitcaddy er en opensource komponent der frit kan benyttes. Alternativt kan applikationen selv udstille sig
-  som SAML service provider.
 
-Der er to config filer der kan bruges: en `config.json` og en `config-email.json`. Forskellen er at email varianten henter en
-brugers email ud af STS Organisation når de logger ind. Ellers er de ens.
+kvalitetsit/kitcaddy er en opensource komponent der frit kan benyttes. Alternativt kan applikationen selv udstille sig
+som SAML service provider.
+
+Der er to config filer der kan bruges: en `config.json` og en `config-email.json`. Forskellen er at email varianten
+henter en brugers email ud af STS Organisation når de logger ind. Ellers er de ens.
 
 Vælg hvilken config der bruges ved at rette i `docker.compose.yml` filen.
 
@@ -96,12 +97,22 @@ gøres afhænger af applikationens valgte saml-rammeværk, men kan typisk genere
 applikationen udstiller ved hjælp af rammeværket. Når metadata er genereret, sendes det til KIT (njo@kvalitetsit.dk
 eller mads@kvalitetsit.dk).
 
+Test-setuppet der køres med docker compose, er allerede registreret som klient i Keycloak.
+
 ### Hente metadata fra Keycloak
 
 Applikationen skal sættes op til at genkende Keycloak som identity provider, hvilket gøres ved at installere en
 metadata-fil for Keycloak i applikationen. Man henter metadata for Keycloak
-her: https://keycloak.test01.kitkube.dk/auth/realms/kombit/protocol/saml/descriptor. Metadata-filen skal placeres et
-sted hvor applikationen kan læse den, hvilket igen afhænger af det valgte saml-rammeværk.
+her: https://loginservice.t0.hosting.kitkube.dk/auth/realms/adgangsstyring/protocol/saml/descriptor, eller for
+email-varianten
+her: https://loginservice.t0.hosting.kitkube.dk/auth/realms/adgangsstyring-email/protocol/saml/descriptor
+.
+
+Metadata-filen skal placeres et sted hvor applikationen kan læse den, hvilket igen afhænger af det valgte
+saml-rammeværk.
+
+De to eksisterende config filer der bruges med docker compose setuppet, sørger for at opsætte IDP metadata-indlæsning
+korrekt.
 
 ### Test af login
 
