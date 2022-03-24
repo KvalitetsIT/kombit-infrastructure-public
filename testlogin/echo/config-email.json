@@ -41,7 +41,7 @@
                            "mongo_host":"mongo",
                            "mongo_db":"samlsp",
                            "audience_restriction":"echo-kitcaddy",
-                           "idp_metadata_url":"https://loginservice.t0.hosting.kitkube.dk/auth/realms/adgangsstyring/protocol/saml/descriptor",
+                           "idp_metadata_url":"https://loginservice.t0.hosting.kitkube.dk/auth/realms/adgangsstyring-email/protocol/saml/descriptor",
                            "entityId":"echo-kitcaddy",
                            "sign_authn_req":"false",
                            "sign_cert_file":"/sp/sp.cer",

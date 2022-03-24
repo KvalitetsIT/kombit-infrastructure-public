@@ -9,7 +9,8 @@ services:
        - ./echo/certificates/echo.cert:/sp/sp.cer
        - ./echo/certificates/echo.pem:/sp/sp.pem
        - ./echo/config.json:/config/config.json
-     command: -config /config/config.json
+       - ./echo/config.json:/config/config-email.json
+     command: -config /config/config.json # change config.json to config-email.json to use email realm that fetch the email for a user on login
      ports:
       - "80:8585"
      networks:
